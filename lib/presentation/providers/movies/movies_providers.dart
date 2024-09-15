@@ -7,6 +7,7 @@ import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+
 // Este nowPlayingMoviesProvider, me va a ayudar a obtener las peliculas que se encuentran
 //  en las carteleras de los cines
 // * State_Notifier_Provider -> es un provedor de información que notifica cuando se cambia el estado
@@ -38,6 +39,7 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
 
   // Estado inicial
   MoviesNotifier({required this.fetchMoreMovies}) : super([]);
+
 
   Future<void> loadNexPage() async {
     currentPage++;
