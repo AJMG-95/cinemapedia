@@ -1,5 +1,5 @@
-import 'package:cinemapedia/presentation/providers/movies/movies_providers.dart';
 import 'package:cinemapedia/presentation/widgets/widgets_barrel.dart';
+import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,8 +28,6 @@ class _HomeView extends ConsumerStatefulWidget {
   // State<_HomeView> createState() => _HomeViewState() -> _HomeViewState createState() => _HomeViewState();
   @override
   _HomeViewState createState() => _HomeViewState();
-
-
 }
 
 // Al tratatarse de un ConsumerStatefulWidget el state cambia:
@@ -45,30 +43,33 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     //  ref es necesario que el widget sea un ConsumerWidget.
     // En este caso al ser un statefullwidget se usa la clase ConsumerStatefulWidget, lo que implica
     //  la modificación del state a un ConsumerState
-    ref.read(nowPlayingMoviesProvider.notifier).loadNexPage(); // Llama al método loadNextPage, haciendo la petición pero sin renderizar los datos
+    ref
+        .read(nowPlayingMoviesProvider.notifier)
+        .loadNexPage(); // Llama al método loadNextPage, haciendo la petición pero sin renderizar los datos
     //* ^^^ Esto no regrasa el valor del estado sino el notifier
 
     //! Básicamente el read llama a la siguiente página y cuando se obtinene los datos se muestran
     //!   los datos de las peliculas mediante el watch.
-
   }
 
-    //* Ahora al se un ConsumerState, a lo largo de la clase se tiene acceso al ref de
-    //*   manera global, en todo el scope de la clase, por lo que no es necesario pasar
-    //*   el ref como argumento del constructor
+  //* Ahora al se un ConsumerState, a lo largo de la clase se tiene acceso al ref de
+  //*   manera global, en todo el scope de la clase, por lo que no es necesario pasar
+  //*   el ref como argumento del constructor
   @override
-  Widget build(BuildContext context/*, ref */) {
+  Widget build(BuildContext context /*, ref */) {
     // En riverpod al hacer ref.watch automaticamente se obtine el valor del estado del provider
     //  En este caso el estado es una lista de peliculas List<Movie>
     // En este caso se usa watch porque se necesita estar pendiente del estado del provider
-    final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
+    /* final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider); */
     //* ^^^ Esto regresa el valor del estado
-
+    final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
     return Column(
       children: [
         const CustomAppbar(),
-        MoviesSlideshow(movies: nowPLayingMovies,)
+        MoviesSlideshow(
+          movies: slideShowMovies,
+        )
       ],
     );
   }
