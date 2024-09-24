@@ -1,4 +1,5 @@
 import 'package:cinemapedia/presentation/providers/movies/movies_providers.dart';
+import 'package:cinemapedia/presentation/widgets/widgets_barrel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,13 +65,23 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     //* ^^^ Esto regresa el valor del estado
 
 
-    return ListView.builder(
-        itemCount: nowPLayingMovies.length,
-        itemBuilder: (context, index) {
-          final movie = nowPLayingMovies[index];
-          return ListTile(
-            title: Text(movie.title),
-          );
-        });
+    return Column(
+      children: [
+        CustomAppbar(),
+        // El Expanded hace que, dado el padre, el widget contenido dentro
+        //  del Expanded ocupe todo el espacio libre dentro del padre.
+        //  Ahora el ListView.builder tendría un alto y ancho fijo.
+        Expanded(
+          child: ListView.builder(
+              itemCount: nowPLayingMovies.length,
+              itemBuilder: (context, index) {
+                final movie = nowPLayingMovies[index];
+                return ListTile(
+                  title: Text(movie.title),
+                );
+              }),
+        )
+      ],
+    );
   }
 }
