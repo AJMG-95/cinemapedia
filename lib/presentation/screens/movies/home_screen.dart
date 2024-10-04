@@ -61,7 +61,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // En riverpod al hacer ref.watch automaticamente se obtine el valor del estado del provider
     //  En este caso el estado es una lista de peliculas List<Movie>
     // En este caso se usa watch porque se necesita estar pendiente del estado del provider
-    /* final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider); */
+    final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
     //* ^^^ Esto regresa el valor del estado
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
@@ -70,6 +70,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
         const CustomAppbar(),
         MoviesSlideshow(
           movies: slideShowMovies,
+        ),
+        MovieHorizontalListview(
+          movies: nowPLayingMovies,
+          title: 'En cines',
+          subTitle: 'Lunes 20',
         )
       ],
     );
