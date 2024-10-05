@@ -7,7 +7,6 @@ import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 // Este nowPlayingMoviesProvider, me va a ayudar a obtener las peliculas que se encuentran
 //  en las carteleras de los cines
 // * State_Notifier_Provider -> es un provedor de información que notifica cuando se cambia el estado
@@ -15,7 +14,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 //  StateNotifier (MoviesNotifier) y que a través de el fluye un dato/estado(state) de tipo List<Movie>
 final nowPlayingMoviesProvider =
     StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
-
   // Esto guarda una referencia a la funcion del movieRepositoryProvider (movie_repository_provider.dart),
   //  que me devuelve el future de un listado de peliculas.
   // Y es esta referencia la que tengo que pasar como argumento al MoviesNotifier para que pueda ejecuttar
@@ -35,13 +33,17 @@ typedef MovieCallBack = Future<List<Movie>> Function({int page});
 class MoviesNotifier extends StateNotifier<List<Movie>> {
   // Este el statenotifier se puede usar para guardar la página actual
   int currentPage = 0;
+  bool isLoading =
+      false; // Bandera para controlar la carga de las página en el loadNexPage
   MovieCallBack fetchMoreMovies;
 
   // Estado inicial
   MoviesNotifier({required this.fetchMoreMovies}) : super([]);
 
-
   Future<void> loadNexPage() async {
+    if (isLoading) return;
+
+    isLoading = true;
     currentPage++;
     //Idealmente siempre se va a querer crear un nuevo estado y asignarle el nuevo valor al
     // estado actual (se sobre escribe el estado anterior), en lugar de modificar el anterior,
@@ -49,5 +51,7 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
     final List<Movie> movies = await fetchMoreMovies(page: currentPage);
     // Usa el operador expread para regresar el esatdo actual + todas las nuevas películas
     state = [...state, ...movies];
+    await Future.delayed(const Duration(microseconds: 300));
+    isLoading = false;
   }
 }

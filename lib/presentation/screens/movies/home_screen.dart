@@ -65,18 +65,45 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     //* ^^^ Esto regresa el valor del estado
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
-    return Column(
-      children: [
-        const CustomAppbar(),
-        MoviesSlideshow(
-          movies: slideShowMovies,
+    //* Esto es para poder aplicar los slivers, son widgets (SliverAppBar) que
+    // * que me permiten introcucir comportamientos con el scroll, como en este caso
+    // * la aparicion/desaparición del appbar
+    return CustomScrollView(slivers: [
+      const SliverAppBar(
+        floating: true,
+        flexibleSpace: FlexibleSpaceBar(
+          centerTitle: true,
+          title: CustomAppbar(),
         ),
-        MovieHorizontalListview(
-          movies: nowPLayingMovies,
-          title: 'En cines',
-          subTitle: 'Lunes 20',
-        )
-      ],
-    );
+      ),
+      SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        return Column(
+          children: [
+            /* const CustomAppbar(), */
+            MoviesSlideshow(
+              movies: slideShowMovies,
+            ),
+            MovieHorizontalListview(
+              movies: nowPLayingMovies,
+              title: 'En cines',
+              subTitle: 'Lunes 20',
+              loadNextPage: () =>
+                  ref.read(nowPlayingMoviesProvider.notifier).loadNexPage(),
+            ),
+            MovieHorizontalListview(
+              movies: nowPLayingMovies,
+              title: 'En cines',
+              subTitle: 'Lunes 20',
+              loadNextPage: () =>
+                  ref.read(nowPlayingMoviesProvider.notifier).loadNexPage(),
+            ),
+            const SizedBox(
+              height: 15,
+            )
+          ],
+        );
+      }, childCount: 1))
+    ]);
   }
 }

@@ -17,7 +17,12 @@ class MoviedbDatasource extends MoviesDatasource {
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     // Recoge la respues desde la api
-    final response = await dio.get('/movie/now_playing');
+    final response = await dio.get(
+      '/movie/now_playing',
+      queryParameters: {
+        'page': page,
+      }
+    );
     //Obtine el modelo (MovieDbResponse) a partir del json de la respuesta
     final movieDBResponse = MovieDbResponse.fromJson(response.data);
     //Mapea el modelo y lo transforma en una lista de entidades (Movie)
