@@ -13,7 +13,7 @@ import 'package:cinemapedia/infrastructure/datasources/moviedb_datasource.dart';
 
 // Como es de solo lectura se usa el tipo/método Provier
 final movieRepositoryProvider = Provider((ref) {
-  // Este provider debe devolver la ikmplemetaciín del repository y este
+  // Este provider debe devolver la implemetación del repository y este
   //  repository pide que se le pase como argumentro el datasource, que es el origen de datos
   //  de la aplicació, por lo que se le pasa la implementación específica de lo que se va a
   //  necesitar para extraer la infromación

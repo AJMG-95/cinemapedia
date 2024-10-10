@@ -24,6 +24,22 @@ final nowPlayingMoviesProvider =
   return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
 });
 
+
+final popularMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getPopular;
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
+
+final topRatedMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getTopRated;
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
+
+
 // Se define un "caso de uso" para indicar al MoviesNotifier, que función va a recibir para
 //  cargar las siguientes películas. De esta forma se limita el StateNotifier a un unico
 //  provider, sino que sea reutilizable con distintos providers
@@ -40,7 +56,7 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
   // Estado inicial
   MoviesNotifier({required this.fetchMoreMovies}) : super([]);
 
-  Future<void> loadNexPage() async {
+  Future<void> loadNextPage() async {
     if (isLoading) return;
 
     isLoading = true;

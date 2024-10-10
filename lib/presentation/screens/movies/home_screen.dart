@@ -46,8 +46,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     //  la modificación del state a un ConsumerState
     ref
         .read(nowPlayingMoviesProvider.notifier)
-        .loadNexPage(); // Llama al método loadNextPage, haciendo la petición pero sin renderizar los datos
+        .loadNextPage(); // Llama al método loadNextPage, haciendo la petición pero sin renderizar los datos
     //* ^^^ Esto no regrasa el valor del estado sino el notifier
+
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
 
     //! Básicamente el read llama a la siguiente página y cuando se obtinene los datos se muestran
     //!   los datos de las peliculas mediante el watch.
@@ -64,6 +67,8 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
     //* ^^^ Esto regresa el valor del estado
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
+    final topRated = ref.watch(topRatedMoviesProvider);
 
     //* Esto es para poder aplicar los slivers, son widgets (SliverAppBar) que
     // * que me permiten introcucir comportamientos con el scroll, como en este caso
@@ -87,16 +92,21 @@ class _HomeViewState extends ConsumerState<_HomeView> {
             MovieHorizontalListview(
               movies: nowPLayingMovies,
               title: 'En cines',
-              subTitle: 'Lunes 20',
+              subTitle: 'Hoy: ${DateTime.now().day}/${DateTime.now().month}',
               loadNextPage: () =>
-                  ref.read(nowPlayingMoviesProvider.notifier).loadNexPage(),
+                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
             ),
             MovieHorizontalListview(
-              movies: nowPLayingMovies,
-              title: 'En cines',
-              subTitle: 'Lunes 20',
+              movies: popularMovies,
+              title: 'Populares',
               loadNextPage: () =>
-                  ref.read(nowPlayingMoviesProvider.notifier).loadNexPage(),
+                  ref.read(popularMoviesProvider.notifier).loadNextPage(),
+            ),
+            MovieHorizontalListview(
+              movies: topRated,
+              title: 'Mejor Valoradas',
+              loadNextPage: () =>
+                  ref.read(topRatedMoviesProvider.notifier).loadNextPage(),
             ),
             const SizedBox(
               height: 15,
