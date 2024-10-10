@@ -12,8 +12,9 @@ Future<void> main() async {
   runApp(
       // Es neceario que se use el ProviderScope, que es el que va a contener las referncias
       //  a todos los providers de riverpod
-    const ProviderScope(child: MainApp(),)
-  );
+      const ProviderScope(
+    child: MainApp(),
+  ));
 }
 
 class MainApp extends StatelessWidget {
