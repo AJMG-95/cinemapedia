@@ -50,6 +50,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     //* ^^^ Esto no regrasa el valor del estado sino el notifier
 
     ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(upComingMoviesProvider.notifier).loadNextPage();
     ref.read(topRatedMoviesProvider.notifier).loadNextPage();
 
     //! Básicamente el read llama a la siguiente página y cuando se obtinene los datos se muestran
@@ -61,16 +62,21 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   //*   el ref como argumento del constructor
   @override
   Widget build(BuildContext context /*, ref */) {
+    //Esto es para introducir una pantalla de carga incicial antes de renderizar nada
+    final initialLoading = ref.watch(initialLoadingProvider);
+    if (initialLoading) return const FullScreenLoader();
+
     // En riverpod al hacer ref.watch automaticamente se obtine el valor del estado del provider
     //  En este caso el estado es una lista de peliculas List<Movie>
     // En este caso se usa watch porque se necesita estar pendiente del estado del provider
     final nowPLayingMovies = ref.watch(nowPlayingMoviesProvider);
-    //* ^^^ Esto regresa el valor del estado
+    //* ^^^ Esto regresa el valor del estado (y es que, en este punto, solo se necesita accecer al valor del estado del provider)
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
-    final topRated = ref.watch(topRatedMoviesProvider);
+    final upComingMovies = ref.watch(upComingMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
 
-    //* Esto es para poder aplicar los slivers, son widgets (SliverAppBar) que
+    //* CustomScrollView es para poder aplicar los slivers, son widgets (SliverAppBar) que
     // * que me permiten introcucir comportamientos con el scroll, como en este caso
     // * la aparicion/desaparición del appbar
     return CustomScrollView(slivers: [
@@ -103,7 +109,13 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                   ref.read(popularMoviesProvider.notifier).loadNextPage(),
             ),
             MovieHorizontalListview(
-              movies: topRated,
+              movies: upComingMovies,
+              title: 'Próximamente',
+              loadNextPage: () =>
+                  ref.read(upComingMoviesProvider.notifier).loadNextPage(),
+            ),
+            MovieHorizontalListview(
+              movies: topRatedMovies,
               title: 'Mejor Valoradas',
               loadNextPage: () =>
                   ref.read(topRatedMoviesProvider.notifier).loadNextPage(),
