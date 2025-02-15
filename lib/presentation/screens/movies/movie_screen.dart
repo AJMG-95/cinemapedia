@@ -203,7 +203,18 @@ class _ActorsByMovie extends ConsumerWidget {
                         width: 135,
                         fit: BoxFit.cover,
                         loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress != null) return const SizedBox();
+                          if (loadingProgress != null) {
+                            return const SizedBox(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                           return FadeIn(child: child);
                         },
                         ),
@@ -227,8 +238,6 @@ class _ActorsByMovie extends ConsumerWidget {
             );
           }),
     );
-
-    return Placeholder();
   }
 }
 
