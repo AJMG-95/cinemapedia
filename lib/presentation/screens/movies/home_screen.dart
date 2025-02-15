@@ -79,53 +79,55 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     //* CustomScrollView es para poder aplicar los slivers, son widgets (SliverAppBar) que
     // * que me permiten introcucir comportamientos con el scroll, como en este caso
     // * la aparicion/desaparición del appbar
-    return CustomScrollView(slivers: [
-      const SliverAppBar(
-        floating: true,
-        flexibleSpace: FlexibleSpaceBar(
-          centerTitle: true,
-          title: CustomAppbar(),
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            centerTitle: true,
+            title: CustomAppbar(),
+          ),
         ),
-      ),
-      SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-        return Column(
-          children: [
-            /* const CustomAppbar(), */
-            MoviesSlideshow(
-              movies: slideShowMovies,
-            ),
-            MovieHorizontalListview(
-              movies: nowPLayingMovies,
-              title: 'En cines',
-              subTitle: 'Hoy: ${DateTime.now().day}/${DateTime.now().month}',
-              loadNextPage: () =>
-                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
-            ),
-            MovieHorizontalListview(
-              movies: popularMovies,
-              title: 'Populares',
-              loadNextPage: () =>
-                  ref.read(popularMoviesProvider.notifier).loadNextPage(),
-            ),
-            MovieHorizontalListview(
-              movies: upComingMovies,
-              title: 'Próximamente',
-              loadNextPage: () =>
-                  ref.read(upComingMoviesProvider.notifier).loadNextPage(),
-            ),
-            MovieHorizontalListview(
-              movies: topRatedMovies,
-              title: 'Mejor Valoradas',
-              loadNextPage: () =>
-                  ref.read(topRatedMoviesProvider.notifier).loadNextPage(),
-            ),
-            const SizedBox(
-              height: 15,
-            )
-          ],
-        );
-      }, childCount: 1))
-    ]);
+        SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          return Column(
+            children: [
+              /* const CustomAppbar(), */
+              MoviesSlideshow(
+                movies: slideShowMovies,
+              ),
+              MovieHorizontalListview(
+                movies: nowPLayingMovies,
+                title: 'En cines',
+                subTitle: 'Hoy: ${DateTime.now().day}/${DateTime.now().month}',
+                loadNextPage: () =>
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+              ),
+              MovieHorizontalListview(
+                movies: popularMovies,
+                title: 'Populares',
+                loadNextPage: () =>
+                    ref.read(popularMoviesProvider.notifier).loadNextPage(),
+              ),
+              MovieHorizontalListview(
+                movies: upComingMovies,
+                title: 'Próximamente',
+                loadNextPage: () =>
+                    ref.read(upComingMoviesProvider.notifier).loadNextPage(),
+              ),
+              MovieHorizontalListview(
+                movies: topRatedMovies,
+                title: 'Mejor Valoradas',
+                loadNextPage: () =>
+                    ref.read(topRatedMoviesProvider.notifier).loadNextPage(),
+              ),
+              const SizedBox(
+                height: 15,
+              )
+            ],
+          );
+        }, childCount: 1))
+      ]
+    );
   }
 }
