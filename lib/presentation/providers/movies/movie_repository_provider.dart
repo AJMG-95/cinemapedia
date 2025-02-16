@@ -1,21 +1,18 @@
-//* Este archivo crea la instancia del repository
-
-// Como esto va a ser un provider que no se va a modificar (inmutable), entidase como
-//  tal que el estado/datos que contiene nunca cambiar, y por ello se puede crear
-//  de/para solo lectura
-// EL objetico de esta clase es proporcionar el MoviesRepositoryImpl de manera global,
-//  para que cualquier otro provider tenga acceso a esa información
+//* Este archivo define el `movieRepositoryProvider`, el cual proporciona una instancia del repositorio de películas (`MoviesRepositoryImpl`).
+//? Este provider es inmutable, es decir, sus datos no cambian una vez inicializados.
+//? Su propósito principal es centralizar la creación del repositorio y hacerlo accesible de forma global en la aplicación.
+/* Clase Provider => (Solo lectura) */
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:cinemapedia/infrastructure/repositories/movie_repository_impl.dart';
 import 'package:cinemapedia/infrastructure/datasources/moviedb_datasource.dart';
 
-// Como es de solo lectura se usa el tipo/método Provier
+///! `movieRepositoryProvider`: Proveedor de solo lectura (`Provider`).
+///? Devuelve una única instancia de `MoviesRepositoryImpl`, asegurando que toda la app use la misma instancia del repositorio.
+///? Cualquier provider que necesite acceder a datos de películas puede leer este provider para obtener el repositorio.
 final movieRepositoryProvider = Provider((ref) {
-  // Este provider debe devolver la implemetación del repository y este
-  //  repository pide que se le pase como argumentro el datasource, que es el origen de datos
-  //  de la aplicació, por lo que se le pasa la implementación específica de lo que se va a
-  //  necesitar para extraer la infromación
-  return MoviesRepositoryImpl( MoviedbDatasource() ) ;
+  //* Se instancia `MoviesRepositoryImpl`, el cual requiere un `MoviesDatasource` como fuente de datos.
+  //* En este caso, se le pasa `MoviedbDatasource()`, que es la implementación concreta para obtener datos desde TheMovieDB.
+  return MoviesRepositoryImpl(MoviedbDatasource());
 });
