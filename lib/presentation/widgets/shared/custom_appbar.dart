@@ -35,20 +35,54 @@ class CustomAppbar extends ConsumerWidget {
 
               IconButton(
                   onPressed: () {
-                    final movieRepository = ref.read(movieRepositoryProvider);
+                    //Estas son las peliculas previamente buscadas
+                    final searchedMovies = ref.read(searchedMoviesProvider);
+                    final searchQuery = ref.read(searchQueryProvider);
 
-                    showSearch<Movie?> (
+                    showSearch<Movie?>(
+                      //! Se puede pasar un valor inicial al `showSearch`.
+                      //? Esto permite reutilizar la búsqueda sin que el usuario tenga que volver a escribir manualmente el término.
+                      //? `searchQuery` almacena el último término buscado, lo que permite que la consulta persista incluso si el `SearchDelegate` se destruye.
+                      query: searchQuery,
+
+                      //! Se debe proporcionar el contexto actual para que `showSearch` pueda abrir la pantalla de búsqueda.
+                      //? `context` es necesario para determinar en qué parte de la jerarquía de widgets se encuentra la ejecución.
                       context: context,
-                      //El delegate se encarga de trabajar la búsqueda
-                      delegate: SearchMovieDelegate (
-                          searchMovies: movieRepository.searchMovies,
-                      )
+
+                      //! `delegate` es el encargado de gestionar la búsqueda.
+                      //? `SearchMovieDelegate` contiene la lógica para buscar películas en la API y manejar los resultados.
+                      //? Este delegate usa `searchMovies`, un callback que realiza la consulta en `movieRepository`.
+                      delegate: SearchMovieDelegate(
+                        //! `initialMovies`: Películas previamente buscadas.
+                        //? Esto evita hacer una nueva petición a la API si ya existen resultados en caché.
+                        initialMovies: searchedMovies,
+                        //! `searchMovies`: Función que ejecuta la búsqueda.
+                        //? `searchMoviesByQuery()` almacena el nuevo término de búsqueda y obtiene los resultados.
+                        /*
+                          `searchMovies`: Referencia a la función que ejecuta la búsqueda.
+                          Se pasa **la referencia al método** (`searchMoviesByQuery`) en lugar de llamarlo (`searchMoviesByQuery(query)`).
+                          Esto se debe a que `SearchMovieDelegate` necesita un callback que se ejecutará **más tarde**, cuando el usuario escriba en la barra de búsqueda.
+                          Si se llamara `searchMoviesByQuery(query)`, la búsqueda se ejecutaría inmediatamente al construir el `delegate`, lo que **no es deseado**.
+                          En cambio, al pasar la referencia `searchMoviesByQuery`, el `SearchDelegate` puede **invocar** la búsqueda en el momento adecuado.
+                        */
+                        searchMovies: ref.read(searchedMoviesProvider.notifier).searchMoviesByQuery,
+                      ),
                     ).then((movie) {
-                        if (!context.mounted) return;
-                        if (movie == null) return;
-                        context.push('/movie/${movie.id}');
-                      }
-                    );
+                      //! Se ejecuta cuando la búsqueda finaliza y devuelve un resultado.
+                      //? `showSearch` retorna un `Future<Movie?>`, por lo que `.then((movie) {...})`
+                      //? se ejecuta al cerrar la búsqueda, ya sea con una película seleccionada o sin resultado.
+
+                      //! Se verifica si el `context` sigue disponible antes de realizar cualquier acción.
+                      //? `context.mounted` evita errores si el usuario ha navegado a otra pantalla mientras la búsqueda estaba abierta.
+                      if (!context.mounted) return;
+
+                      //! Si el usuario no seleccionó ninguna película, simplemente se sale de la función.
+                      if (movie == null) return;
+
+                      //! Si hay una película seleccionada, se navega a la pantalla de detalles de la película.
+                      //? `context.push('/movie/${movie.id}')` cambia la ruta a la vista de detalles de la película seleccionada.
+                      context.push('/movie/${movie.id}');
+                    });
                   },
                   icon: const Icon(Icons.search_rounded))
             ],
