@@ -1,3 +1,5 @@
+import 'package:cinemapedia/presentation/views/home_views/favorites_view.dart';
+import 'package:cinemapedia/presentation/views/home_views/home_view.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:cinemapedia/presentation/screens/screens.dart';
@@ -10,29 +12,68 @@ import 'package:cinemapedia/presentation/screens/screens.dart';
 final appRouter = GoRouter(
   initialLocation: '/', // Ruta inicial de la aplicación
   routes: [
-    //* Ruta principal (HomeScreen)
-    GoRoute(
-      path: '/',
-      name: HomeScreen.name,
-      builder: (context, state) => const HomeScreen(),
-
-      //* Definición de rutas hijas dentro de HomeScreen.
-      //* Permite regresar a '/' desde la AppBar del widget hijo, incluso si se accedió por un deeplink.
+    ShellRoute(
+      // builder: algo que se llama en tiempo de ejecución para construir algo.
+      builder: (context, state, child) {
+        return HomeScreen(childView: child);
+      },
       routes: [
         GoRoute(
-          path:
-              'movie/:id', // No se usa `/` al inicio porque es una subruta de `/`
-          name: MovieScreen.name,
+          path: '/',
           builder: (context, state) {
-            //? Obtiene el `id` de la película desde los parámetros de la URL.
-            //? Si no se encuentra, asigna 'no-id' por defecto.
-            final movieId = state.pathParameters['id'] ?? 'no-id';
-
-            // Retorna la pantalla de detalles de la película con el `movieId` recibido.
-            return MovieScreen(movieId: movieId);
+            return const HomeView();
           },
+          routes: [
+             GoRoute(
+              path: 'movie/:id', // No se usa `/` al inicio porque es una subruta de `/`
+              name: MovieScreen.name,
+              builder: (context, state) {
+                //? Obtiene el `id` de la película desde los parámetros de la URL.
+                //? Si no se encuentra, asigna 'no-id' por defecto.
+                final movieId = state.pathParameters['id'] ?? 'no-id';
+
+                //Retorna la pantalla de detalles de la película con el `movieId` recibido.
+                return MovieScreen(movieId: movieId);
+              },
+            ),
+          ]
+        ),
+        GoRoute(
+          path: '/favorites',
+          builder: (context, state) {
+            return const FavoritesView();
+          }
         ),
       ],
     ),
+
+    /*
+      ! Configuración de rutas padre/hijo
+
+      * Ruta principal (HomeScreen)
+      GoRoute(
+        path: '/',
+        name: HomeScreen.name,
+        builder: (context, state) => const HomeScreen(),
+
+        * Definición de rutas hijas dentro de HomeScreen.
+        * Permite regresar a '/' desde la AppBar del widget hijo, incluso si se accedió por un deeplink.
+        routes: [
+          GoRoute(
+            path:
+                'movie/:id', // No se usa `/` al inicio porque es una subruta de `/`
+            name: MovieScreen.name,
+            builder: (context, state) {
+              ? Obtiene el `id` de la película desde los parámetros de la URL.
+              ? Si no se encuentra, asigna 'no-id' por defecto.
+              final movieId = state.pathParameters['id'] ?? 'no-id';
+
+              Retorna la pantalla de detalles de la película con el `movieId` recibido.
+              return MovieScreen(movieId: movieId);
+            },
+          ),
+        ],
+      ),
+    */
   ],
 );
