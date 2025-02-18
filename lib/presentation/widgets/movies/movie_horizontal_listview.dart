@@ -110,7 +110,7 @@ class _Slilde extends StatelessWidget {
                   }
                   return GestureDetector( // Mete interactiviadad de gestos al widget hijo
                     // usar push permite volver facilmente a la pantalla anterior
-                    onTap: () => context.push('/movie/${movie.id}'),
+                    onTap: () => context.push('/home/0/movie/${movie.id}'),
                     child: FadeIn(child: child)
                   );
                 },

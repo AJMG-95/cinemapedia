@@ -80,8 +80,8 @@ class CustomAppbar extends ConsumerWidget {
                       if (movie == null) return;
 
                       //! Si hay una película seleccionada, se navega a la pantalla de detalles de la película.
-                      //? `context.push('/movie/${movie.id}')` cambia la ruta a la vista de detalles de la película seleccionada.
-                      context.push('/movie/${movie.id}');
+                      //? `context.push('/home/0/movie/${movie.id}')` cambia la ruta a la vista de detalles de la película seleccionada.
+                      context.push('/home/0/movie/${movie.id}');
                     });
                   },
                   icon: const Icon(Icons.search_rounded))

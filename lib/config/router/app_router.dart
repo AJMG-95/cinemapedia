@@ -8,14 +8,23 @@ import 'package:cinemapedia/presentation/screens/screens.dart';
 ///? - `initialLocation`: Define la pantalla inicial de la aplicación.
 ///? - `routes`: Lista de rutas disponibles en la app.
 final appRouter = GoRouter(
-  initialLocation: '/', // Ruta inicial de la aplicación
+  initialLocation: '/home/0', // Ruta inicial de la aplicación
   routes: [
     //* Ruta principal (HomeScreen)
     GoRoute(
-      path: '/',
+      //Se le pone un nombre a la ruta y se le pasa un parámetro "page" que sirve para indicar el view que se quiere mostrar (tabs de la navbar)
+      path: '/home/:page',
       name: HomeScreen.name,
-      builder: (context, state) => const HomeScreen(),
+      builder: (context, state) {
+        var pageIndex =
+            int.tryParse(state.pathParameters['page'] ?? '0') ?? 0;
 
+        pageIndex = pageIndex < 0 || pageIndex > 2 ? 0 : pageIndex;
+
+        return HomeScreen(
+          pageIndex: pageIndex,
+        );
+      },
       //* Definición de rutas hijas dentro de HomeScreen.
       //* Permite regresar a '/' desde la AppBar del widget hijo, incluso si se accedió por un deeplink.
       routes: [
@@ -34,5 +43,10 @@ final appRouter = GoRouter(
         ),
       ],
     ),
+
+    GoRoute(
+      path: '/',
+      redirect: (_, __) => '/home/0',
+    )
   ],
 );
