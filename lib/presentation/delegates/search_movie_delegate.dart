@@ -36,7 +36,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
 
   //*StreamController que gestionará el icono/función del buildActions
-  StreamController<bool> _isLoadingStream = StreamController<bool>.broadcast();
+  final StreamController<bool> _isLoadingStream = StreamController<bool>.broadcast();
 
   //* Temporizador (`Timer`) para manejar la espera antes de realizar la búsqueda.
   //? Sirve para evitar múltiples peticiones seguidas mientras el usuario escribe.
