@@ -4,7 +4,7 @@ import 'package:isar/isar.dart';
 ///* Isar genera automáticamente un archivo `movie.g.dart` que contiene el código necesario para serializar y deserializar los objetos de la clase `Movie`.
 ///? Este archivo generado maneja la configuración de la base de datos y permite que Isar realice consultas eficientes sobre la colección `Movie`.
 ///* Es necesario ejecutar el comando `flutter pub run build_runner build` 0 'dart run build_runner build' para generar o actualizar `movie.g.dart` cuando se realizan cambios en la clase.
-part 'movie.g.dart';
+/* part 'movie.g.dart'; */
 
 ///! Definición de una colección de Isar para almacenar películas en la base de datos local,
 ///!  para ello se usa la entidad de las peliculas (Movie) .
