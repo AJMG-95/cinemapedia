@@ -1,12 +1,12 @@
 import 'package:isar/isar.dart';
 
-/* part 'watched_movie.g.dart'; */
+part 'watched_movie.g.dart';
 
-/* @Collection() */
+@Collection()
 class WatchedMovie {
- /*  Id isarId = Isar.autoIncrement; */
+  Id isarId = Isar.autoIncrement;
 
-/*   @Index() */
+  @Index()
   late int movieId;
 
   late DateTime watchedDate;
