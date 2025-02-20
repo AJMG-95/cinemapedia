@@ -1,0 +1,2 @@
+C:/Users/ajmg9/Desktop/AutoDidact/3 Movil/proyectos/cinemapedia/android/app/.cxx/RelWithDebInfo/1d4w5o5c/x86/CMakeFiles/edit_cache.dir
+C:/Users/ajmg9/Desktop/AutoDidact/3 Movil/proyectos/cinemapedia/android/app/.cxx/RelWithDebInfo/1d4w5o5c/x86/CMakeFiles/rebuild_cache.dir
