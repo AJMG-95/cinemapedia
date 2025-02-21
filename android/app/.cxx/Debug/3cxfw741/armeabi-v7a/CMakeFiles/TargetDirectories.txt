@@ -1,0 +1,2 @@
+C:/Users/ajmg9/Desktop/AutoDidact/3 Movil/proyectos/cinemapedia/android/app/.cxx/Debug/3cxfw741/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/ajmg9/Desktop/AutoDidact/3 Movil/proyectos/cinemapedia/android/app/.cxx/Debug/3cxfw741/armeabi-v7a/CMakeFiles/rebuild_cache.dir
