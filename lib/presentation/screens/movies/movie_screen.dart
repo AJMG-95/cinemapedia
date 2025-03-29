@@ -283,8 +283,10 @@ class _CustomSliverAppBar extends ConsumerWidget {
         //? - `ref.watch(localStorageRepositoryPrivder).toggleFavorite(movie)`: Alterna el estado de favorito.
         //? - `ref.invalidate(isFavoriteProvider(movie.id))`: Invalida el estado para forzar una actualización visual.
         IconButton(
-            onPressed: () {
-              ref.watch(localStorageRepositoryPrivder).toggleFavorite(movie);
+            onPressed: () async {
+              /* await ref.read(localStorageRepositoryPrivder).toggleFavorite(movie); */
+
+              await ref.read(favoriteMoviesProvider.notifier).toggleFavorite (movie);
 
               ref.invalidate(isFavoriteProvider(movie.id));
             },

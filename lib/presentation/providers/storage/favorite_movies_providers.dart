@@ -40,22 +40,30 @@ class StorageMoviesNotifier extends StateNotifier<Map<int, Movie>> {
   ///* Carga la siguiente página de películas favoritas desde el almacenamiento local.
   /// - Se carga un lote de 10 películas por página.
   /// - Se actualiza `state` con las nuevas películas obtenidas.
-  Future<List<Movie>> loadNexPage() async {
-    final movies = await localStorageRepository.loadMovies(offset: page * 10);
+  Future<List<Movie>> loadNextPage() async {
+    final movies =
+        await localStorageRepository.loadMovies(offset: page * 10, limit: 20);
     page++;
 
     final tempMoviesMap = <int, Movie>{};
-
     for (final movie in movies) {
-      tempMoviesMap[movie.id] =
-          movie; //! Se agrega cada película al mapa temporal con su ID como clave.
+      tempMoviesMap[movie.id] = movie;
     }
 
-    state = {
-      ...state,
-      ...tempMoviesMap
-    }; //! Se actualiza el estado con las nuevas películas.
+    state = {...state, ...tempMoviesMap};
 
     return movies;
+  }
+
+  Future<void> toggleFavorite(Movie movie) async {
+    await localStorageRepository.toggleFavorite(movie);
+    final bool isMovieInFavorites = state[movie.id] != null;
+
+    if (isMovieInFavorites) {
+      state.remove(movie.id);
+      state = {...state};
+    } else {
+      state = {...state, movie.id: movie};
+    }
   }
 }

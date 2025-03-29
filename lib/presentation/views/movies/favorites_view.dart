@@ -1,16 +1,11 @@
 import 'package:cinemapedia/presentation/providers/storage/favorite_movies_providers.dart';
-import 'package:cinemapedia/presentation/widgets/movies/movie_masonry.dart';
+import 'package:cinemapedia/presentation/widgets/shared/beating_heart_icon.dart';
+import 'package:cinemapedia/presentation/widgets/widgets_barrel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:animate_do/animate_do.dart'; // Asegúrate de importar animate_do
 
-///! `FavoritesView`
-///* Este widget es un `ConsumerStatefulWidget`, lo que permite consumir providers de forma dinámica.
-/*
-? `ConsumerStatefulWidget`:
-  - Se usa en lugar de `StatefulWidget` cuando un widget necesita acceder a `ref`.
-  - Permite escuchar y modificar el estado de los providers de manera eficiente.
-  - Ideal cuando el widget debe reconstruirse dinámicamente al cambiar el estado del provider.
-*/
 class FavoritesView extends ConsumerStatefulWidget {
   const FavoritesView({super.key});
 
@@ -18,31 +13,61 @@ class FavoritesView extends ConsumerStatefulWidget {
   FavoritesViewState createState() => FavoritesViewState();
 }
 
-///! `FavoritesViewState`
-///* Al ser `ConsumerStatefulWidget`, su `State` es de tipo `ConsumerState` en lugar de `State`.
-/*
-? `ConsumerState<FavoritesView>`:
-  - `ConsumerState` proporciona acceso directo al `ref`.
-  - `ref` permite leer, ver y escuchar cambios en los providers sin necesidad de `Consumer`.
-  - Es útil cuando se necesita acceder a un provider en `initState()`.
-*/
 class FavoritesViewState extends ConsumerState<FavoritesView> {
+  bool isLastPage = false;
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
-    //! Carga la primera página de películas favoritas al iniciar la vista.
-    ref.read(favoriteMoviesProvider.notifier).loadNexPage();
+    loadNextPage();
+  }
+
+  void loadNextPage() async {
+    if (isLoading || isLastPage) return;
+    isLoading = true;
+
+    final movies =
+        await ref.read(favoriteMoviesProvider.notifier).loadNextPage();
+    isLoading = false;
+
+    if (movies.isEmpty) {
+      isLastPage = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final favoriteMovies = ref
-        .watch(favoriteMoviesProvider)
-        .values
-        .toList(); //! Observa la lista de películas favoritas.
+    final favoriteMovies = ref.watch(favoriteMoviesProvider).values.toList();
+
+    if (favoriteMovies.isEmpty) {
+      final colors = Theme.of(context).colorScheme;
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+          BeatingHeartIcon(color: colors.primary),
+            const SizedBox(height: 10),
+            Text('Ohhh no!!',
+                style: TextStyle(fontSize: 30, color: colors.primary)),
+            const Text('No tienes películas favoritas',
+                style: TextStyle(fontSize: 20, color: Colors.black45)),
+            const SizedBox(height: 20),
+            FilledButton.tonal(
+              onPressed: () => context.go('/home/0'),
+              child: const Text('Empieza a buscar'),
+            )
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
-      body: MovieMasonry(movies: favoriteMovies)
+      body: MovieMasonry(
+        loadNextPage: loadNextPage,
+        movies: favoriteMovies,
+      ),
     );
   }
 }
